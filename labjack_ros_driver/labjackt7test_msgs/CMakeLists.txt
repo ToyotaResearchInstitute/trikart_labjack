@@ -22,6 +22,6 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES labjackt7test_msgs
-   CATKIN_DEPENDS message_generation message_runtime
+   CATKIN_DEPENDS std_msgs message_generation message_runtime
 #  DEPENDS system_lib
 )
