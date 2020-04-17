@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
 set(LabJackM_INCLUDE_DIRS /usr/local/lib/include)
 set(LabJackM_LIBRARIES
 LabJackM
-labjackusb
 )
 
 add_message_files(

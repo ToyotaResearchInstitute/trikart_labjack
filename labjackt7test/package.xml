@@ -60,8 +60,6 @@
 
   <build_depend>LabJackM</build_depend>
   <exec_depend>LabJackM</exec_depend>
-  <build_depend>labjackusb</build_depend>
-  <exec_depend>labjackusb</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
