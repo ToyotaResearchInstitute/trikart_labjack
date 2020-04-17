@@ -24,7 +24,7 @@ labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
     {
         _driver->setScanRate(_acqrate);
         _driver->setStreaming();
-        _stream_publisher = _pnh->advertise<labjackt7test::labjackt7test_streaming>(_stream_pub_topic.c_str(),1,true);
+        _stream_publisher = _pnh->advertise<labjackt7test_msgs::labjackt7test_streaming>(_stream_pub_topic.c_str(),1,true);
     }
     else
     {
@@ -32,7 +32,7 @@ labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
         {
             std::string temp = "labjack/channel_"+std::to_string(i);
             _pub_topics.push_back(temp);
-            _publishers.push_back(_pnh->advertise<labjackt7test::labjackt7test_channel>(temp,1,true));
+            _publishers.push_back(_pnh->advertise<labjackt7test_msgs::labjackt7test_channel>(temp,1,true));
         }
     }
 }
@@ -46,7 +46,7 @@ labjack_t7_ros::~labjack_t7_ros()
 void labjack_t7_ros::startPublishing()
 {
     std::vector<double> temp;
-    labjackt7test::labjackt7test_channel msg;
+    labjackt7test_msgs::labjackt7test_channel msg;
     while(ros::ok() && _pnh->ok())
     {
         // temp.clear();

@@ -6,7 +6,7 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  message_generation
+  labjackt7test_msgs
 )
 
 set(LabJackM_INCLUDE_DIRS /usr/local/lib/include)
@@ -14,20 +14,9 @@ set(LabJackM_LIBRARIES
 LabJackM
 )
 
-add_message_files(
-  FILES
-  labjackt7test_channel.msg
-  labjackt7test_streaming.msg
-)
-
-generate_messages(
-  DEPENDENCIES
-  std_msgs  # Or other packages containing msgs
-)
-
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs message_generation message_runtime
+  CATKIN_DEPENDS roscpp std_msgs labjackt7test_msgs
 )
 
 include_directories(

@@ -5,8 +5,8 @@
 
 #include <ros/ros.h>
 #include <ros/publisher.h>
-#include "labjackt7test/labjackt7test_channel.h" // msg file for normal functionality
-#include "labjackt7test/labjackt7test_streaming.h" // msg file for streaming functionality
+#include "labjackt7test_msgs/labjackt7test_channel.h" // msg file for normal functionality
+#include "labjackt7test_msgs/labjackt7test_streaming.h" // msg file for streaming functionality
 
 class labjack_t7_ros
 {
@@ -16,7 +16,7 @@ private:
     std::vector<ros::Publisher> _publishers;
     ros::Rate* _loop;
 
-    labjackt7test::labjackt7test_streaming _stream_msg;
+    labjackt7test_msgs::labjackt7test_streaming _stream_msg;
 
     labjack_t7_driver* _driver;
     std::shared_ptr<std::thread> _streamthread;

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>labjack_ros_driver</name>
+    <version>0.0.0</version>
+    <description>ROS driver for labjack t7 devices using LJM library</description>
+
+    <maintainer email="yujun.lai@uts.edu.au">Yujun Lai</maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    
+    <export>
+        <metapackage />
+    </export>
+
+</package>

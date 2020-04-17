@@ -7,7 +7,7 @@ This is a ros package which is used for the LabJack T7 DAQ. Currently it's used 
 For this to work, you do require the LabJack proprietary libraries LJM which can be obtained at:
 https://labjack.com/support/software/api/ljm
 
-Changes are required in the CMakeLists.txt (line 12) to reflect where you have installed the libraries. The default script from Labjack will install them at `/usr/local/lib/include`
+Changes are required in the CMakeLists.txt (line 12) to reflect where you have installed the libraries. The default script from Labjack will install the library header files at `/usr/local/include`
 
 ### Launch Arguments
 ```
