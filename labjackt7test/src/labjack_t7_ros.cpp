@@ -101,7 +101,7 @@ void labjack_t7_ros::publishStream()
     {
         aData.clear();
         double temp[dat_size];
-        _driver->acquireReadings(temp); // FIX HERE - not grabbing the data!
+        _driver->acquireReadings(temp);
         _stream_msg.header.stamp = ros::Time::now();
         for(int i=0;i<dat_size;i++)
         {

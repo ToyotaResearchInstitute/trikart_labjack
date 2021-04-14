@@ -1,11 +1,11 @@
 <launch>
 
-<arg name="publishrate" default="1000" />
+<arg name="publishrate" default="100" />
 <arg name="channelnumber" default="8" />
 <arg name="acqrate" default="12000" />
 <arg name="streampubtopic" default="/labjack/channelstream"/>
 <arg name="verbose" default="false" />
-<arg name="streaming" default="false" />
+<arg name="streaming" default="true" />
 
 
 <node pkg="labjackt7test" type="labjackt7test_node" name="labjack_t7_node" output="screen" >
