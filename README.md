@@ -1,4 +1,4 @@
-Author: Yujun Lai (yujun.lai@student.uts.edu.au)
+Author: Yujun Lai (yujun.lai@uts.edu.au)
 
 # Purpose
 This is a ros package which is used for the LabJack T7 DAQ. Currently it's used for collecting EMG data using the Delsys 8-Channel Bagnoli System. The default values for the driver are catered towards USB connection for the T7, but it can be changed easily to incorporate other methods (Ethernet, Wifi) and devices in LabJack (T4 series).
@@ -24,7 +24,7 @@ roslaunch labjackt7test labjack_t7.launch
 
 `verbose` - verbosity flag. Tons of std::cout in driver for debugging. Default value is false.
 
-`streaming` - flag for streaming mode. Default is false, leading to call response mode (default device mode).
+`streaming` - flag for streaming mode. Default is true. If set to false, device will use call response mode.
 
 ## (Other) Nodes
 
