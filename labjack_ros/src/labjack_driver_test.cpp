@@ -1,11 +1,11 @@
-#include "labjackt7test/labjack_t7_driver.h"
+#include "labjack_ros/labjack_driver.h"
 
 int main(int argc, char** argv)
 {
     std::cout << std::setprecision(8);
-    std::cout << "Starting labjack_t7_driver test" << std::endl;
-    std::cout << "Default values used: any serial number, t7 series device, USB comms type, acq rate of 1000Hz, 8 channels" << std::endl;
-    labjack_t7_driver test;
+    std::cout << "Starting labjack_driver test" << std::endl;
+    std::cout << "Default values used: any serial number, any series device, USB comms type, acq rate of 1000Hz, 8 channels" << std::endl;
+    labjack_driver test;
 
     // if(test.openConnection())
     // {

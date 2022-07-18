@@ -8,7 +8,7 @@
 <arg name="streaming" default="true" />
 
 
-<node pkg="labjackt7test" type="labjackt7test_node" name="labjack_t7_node" output="screen" >
+<node pkg="labjack_ros" type="labjack_node" name="labjack_node" output="screen" >
     <param name="pubrate" type="int" value="$(arg publishrate)" />
     <param name="numchannels" type="int" value="$(arg channelnumber)" />
     <param name="acquisitionrate" type="int" value="$(arg acqrate)" />

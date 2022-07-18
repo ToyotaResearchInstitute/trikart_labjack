@@ -5,7 +5,7 @@
 #include <chrono>
 #include <iomanip>
 
-class labjack_t7_driver
+class labjack_driver
 {
 private:
     //default parameters for device
@@ -33,8 +33,8 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_t7_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,std::string identifier="LJM_idANY",double serial_num = 0,int dev_type = 7,int comm_type = 1);
-    ~labjack_t7_driver();
+    labjack_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,std::string identifier="LJM_idANY",double serial_num = 0,int dev_type = 0,int comm_type = 1);
+    ~labjack_driver();
 
     // setter
     void setAddressList(std::vector<int> add_list);

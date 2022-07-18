@@ -1,0 +1,9 @@
+<launch>
+
+<arg name="verbose" default="true" />
+
+<node pkg="labjack_ros" type="labjack_ros_connection_test" name="labjack_ros_connection_test" output="screen" >
+    <param name="verbose" type="bool" value="$(arg verbose)" />
+</node>
+
+</launch>

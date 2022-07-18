@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(labjackt7test)
+project(labjack_ros)
 
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  labjackt7test_msgs
+  labjack_msgs
 )
 
 set(LabJackM_INCLUDE_DIRS /usr/local/lib/include)
@@ -16,7 +16,7 @@ LabJackM
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs labjackt7test_msgs
+  CATKIN_DEPENDS roscpp std_msgs labjack_msgs
 )
 
 include_directories(
@@ -26,10 +26,10 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}_connection_test
-  src/labjack_t7_connection_test.cpp
+  src/labjack_connection_test.cpp
 
   src/labjack_serial_test.cpp
-  include/labjackt7test/labjack_serial_test.h
+  include/labjack_ros/labjack_serial_test.h
 )
 target_link_libraries(${PROJECT_NAME}_connection_test
   #${catkin_LIBRARIES}
@@ -37,10 +37,10 @@ target_link_libraries(${PROJECT_NAME}_connection_test
 )
 
 add_executable(${PROJECT_NAME}_driver_test
-  src/labjack_t7_driver_test.cpp
+  src/labjack_driver_test.cpp
 
-  src/labjack_t7_driver.cpp
-  include/labjackt7test/labjack_t7_driver.h
+  src/labjack_driver.cpp
+  include/labjack_ros/labjack_driver.h
 )
 target_link_libraries(${PROJECT_NAME}_driver_test
   ${catkin_LIBRARIES}
@@ -48,13 +48,13 @@ target_link_libraries(${PROJECT_NAME}_driver_test
 )
  
 add_executable(${PROJECT_NAME}_node
-  src/labjack_t7_node.cpp
+  src/labjack_node.cpp
 
-  src/labjack_t7_driver.cpp
-  include/labjackt7test/labjack_t7_driver.h
+  src/labjack_driver.cpp
+  include/labjack_ros/labjack_driver.h
 
-  src/labjack_t7_ros.cpp
-  include/labjackt7test/labjack_t7_ros.h
+  src/labjack_ros.cpp
+  include/labjack_ros/labjack_ros.h
 )
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}

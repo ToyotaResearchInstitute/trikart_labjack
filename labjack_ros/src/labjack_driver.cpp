@@ -1,6 +1,6 @@
-#include "labjackt7test/labjack_t7_driver.h"
+#include "labjack_ros/labjack_driver.h"
 
-labjack_t7_driver::labjack_t7_driver(int chan_num,int acq_rate,bool verbose,std::string identifier,double serial_num,int dev_type,int comm_type)
+labjack_driver::labjack_driver(int chan_num,int acq_rate,bool verbose,std::string identifier,double serial_num,int dev_type,int comm_type)
 {
     // input user chosen parameters
     _def_param._serial_number = serial_num;
@@ -38,7 +38,7 @@ labjack_t7_driver::labjack_t7_driver(int chan_num,int acq_rate,bool verbose,std:
     }
 }
 
-labjack_t7_driver::~labjack_t7_driver()
+labjack_driver::~labjack_driver()
 {
     if(!_def_param._dev_found)
     {
@@ -77,13 +77,13 @@ labjack_t7_driver::~labjack_t7_driver()
     while(checkConnection());
 }
 
-void labjack_t7_driver::setAddressList(std::vector<int> add_list)
+void labjack_driver::setAddressList(std::vector<int> add_list)
 {
     _addresses.clear();
     _addresses = add_list;
 }
 
-double labjack_t7_driver::getSerialNumber()
+double labjack_driver::getSerialNumber()
 {
     if(!_def_param._dev_found)
     {
@@ -99,19 +99,19 @@ double labjack_t7_driver::getSerialNumber()
     }
 }
 
-bool labjack_t7_driver::checkConnection()
+bool labjack_driver::checkConnection()
 {
     return _def_param._dev_found;
 }
 
-bool labjack_t7_driver::checkStreaming()
+bool labjack_driver::checkStreaming()
 {
     return _def_param._streaming;
 }
 
 
 // default functionality
-std::vector<double> labjack_t7_driver::getCurrentReadings()
+std::vector<double> labjack_driver::getCurrentReadings()
 {
     std::vector<double> temp;
     double tempval;
@@ -125,7 +125,7 @@ std::vector<double> labjack_t7_driver::getCurrentReadings()
 
 
 // streaming functionality
-void labjack_t7_driver::setStreaming()
+void labjack_driver::setStreaming()
 {
     if(_def_param._streaming)
     {
@@ -147,7 +147,7 @@ void labjack_t7_driver::setStreaming()
     }
 }
 
-void labjack_t7_driver::unsetStreaming()
+void labjack_driver::unsetStreaming()
 {
     if(!_def_param._streaming)
     {
@@ -164,23 +164,23 @@ void labjack_t7_driver::unsetStreaming()
     }
 }
 
-void labjack_t7_driver::setScanRate(double scanrate)
+void labjack_driver::setScanRate(double scanrate)
 {
     _str_param._scan_rate = scanrate;
     _str_param._scans_per_read = scanrate/_def_param._num_channel;
 }
 
-double labjack_t7_driver::getScanRate()
+double labjack_driver::getScanRate()
 {
     return _str_param._scan_rate;
 }
 
-int labjack_t7_driver::getDataSize()
+int labjack_driver::getDataSize()
 {
     return _str_param._scans_per_read*_def_param._num_channel;
 }
 
-bool labjack_t7_driver::startStream()
+bool labjack_driver::startStream()
 {
     if(_acquisition)
     {
@@ -225,7 +225,7 @@ bool labjack_t7_driver::startStream()
     return true;
 }
 
-void labjack_t7_driver::stopStream()
+void labjack_driver::stopStream()
 {
     if(!_acquisition)
     {
@@ -254,7 +254,7 @@ void labjack_t7_driver::stopStream()
     }
 }
 
-bool labjack_t7_driver::acquireReadings(double *data)
+bool labjack_driver::acquireReadings(double *data)
 {
     if(!_acquisition)
     {
@@ -292,7 +292,7 @@ bool labjack_t7_driver::acquireReadings(double *data)
 
 
 // Private functions
-bool labjack_t7_driver::openConnection()
+bool labjack_driver::openConnection()
 {
     try
     {
@@ -342,7 +342,7 @@ bool labjack_t7_driver::openConnection()
     return true;
 }
 
-void labjack_t7_driver::closeConnection()
+void labjack_driver::closeConnection()
 {
     if(!_def_param._dev_found)
     {

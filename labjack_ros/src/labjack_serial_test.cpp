@@ -1,4 +1,4 @@
-#include "labjackt7test/labjack_serial_test.h"
+#include "labjack_ros/labjack_serial_test.h"
 
 
 labjack_serial_test::labjack_serial_test(double serial_num,int dev_type,int comm_type):_serial_number(serial_num),_device_type(dev_type),_comms_type(comm_type)

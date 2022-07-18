@@ -1,14 +1,14 @@
-#include "labjackt7test/labjack_t7_driver.h"
+#include "labjack_ros/labjack_driver.h"
 #include <string>
 #include <memory>
 #include <mutex>
 
 #include <ros/ros.h>
 #include <ros/publisher.h>
-#include "labjackt7test_msgs/labjackt7test_channel.h" // msg file for normal functionality
-#include "labjackt7test_msgs/labjackt7test_streaming.h" // msg file for streaming functionality
+#include "labjack_msgs/labjack_channel.h" // msg file for normal functionality
+#include "labjack_msgs/labjack_stream.h" // msg file for streaming functionality
 
-class labjack_t7_ros
+class labjack_ros
 {
 private:
     ros::NodeHandle* _pnh;
@@ -16,9 +16,9 @@ private:
     std::vector<ros::Publisher> _publishers;
     ros::Rate* _loop;
 
-    labjackt7test_msgs::labjackt7test_streaming _stream_msg;
+    labjack_msgs::labjack_stream _stream_msg;
 
-    labjack_t7_driver* _driver;
+    labjack_driver* _driver;
     std::shared_ptr<std::thread> _streamthread;
     bool _str_started;
 
@@ -32,8 +32,8 @@ private:
     void publishStream();
 
 public:
-    labjack_t7_ros(ros::NodeHandle& pnh);
-    ~labjack_t7_ros();
+    labjack_ros(ros::NodeHandle& pnh);
+    ~labjack_ros();
 
     // default functionality
     void startPublishing();

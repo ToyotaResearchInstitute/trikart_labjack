@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>labjackt7test</name>
+  <name>labjack_ros</name>
   <version>0.0.0</version>
-  <description>The labjackt7test package</description>
+  <description>The labjack_ros package</description>
 
-  <maintainer email="yujun.lai@student.uts.edu.au">Yujun Lai</maintainer>
+  <maintainer email="velin.dimitrov@tri.global">Velin Dimitrov</maintainer>
 
   <license>MIT</license>
 
@@ -15,8 +15,8 @@
   <exec_depend>roscpp</exec_depend>
   <build_depend>std_msgs</build_depend>
   <exec_depend>std_msgs</exec_depend>
-  <build_depend>labjackt7test_msgs</build_depend>
-  <exec_depend>labjackt7test_msgs</exec_depend>
+  <build_depend>labjack_msgs</build_depend>
+  <exec_depend>labjack_msgs</exec_depend>
 
   <build_depend>LabJackM</build_depend>
   <exec_depend>LabJackM</exec_depend>

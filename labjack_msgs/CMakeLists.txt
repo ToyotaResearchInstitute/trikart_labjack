@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(labjackt7test_msgs)
+project(labjack_msgs)
 
 add_compile_options(-std=c++11)
 
@@ -10,8 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
-  labjackt7test_channel.msg
-  labjackt7test_streaming.msg
+  labjack_channel.msg
+  labjack_stream.msg
 )
 
 generate_messages(
@@ -21,7 +21,7 @@ generate_messages(
 
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES labjackt7test_msgs
+#  LIBRARIES(labjack_msgs)
    CATKIN_DEPENDS std_msgs message_generation message_runtime
 #  DEPENDS system_lib
 )

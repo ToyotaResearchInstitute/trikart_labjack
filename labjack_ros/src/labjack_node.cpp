@@ -1,13 +1,13 @@
-#include "labjackt7test/labjack_t7_ros.h"
+#include "labjack_ros/labjack_ros.h"
 
 int main(int argc, char** argv)
 {
-    ros::init(argc,argv,"labjack_t7_ros_node");
+    ros::init(argc,argv,"labjack_ros_node");
     ros::NodeHandle nh;
     ros::NodeHandle pnh("~");
 
     {
-        labjack_t7_ros test(pnh);
+        labjack_ros test(pnh);
         bool temp = false;
         pnh.getParam("streaming",temp);
         if(temp)

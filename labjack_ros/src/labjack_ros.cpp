@@ -1,6 +1,6 @@
-#include "labjackt7test/labjack_t7_ros.h"
+#include "labjack_ros/labjack_ros.h"
 
-labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
+labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
     if(!getParams())
     {
@@ -9,7 +9,7 @@ labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
     }
     _loop = new ros::Rate(_pubrate);
 
-    _driver = new labjack_t7_driver(_numchannels,_acqrate,_verbose);
+    _driver = new labjack_driver(_numchannels,_acqrate,_verbose);
     if(!_driver->checkConnection())
     {
         ROS_ERROR("Unable to find connection for labjack driver. Use verbose to check driver error.");
@@ -24,7 +24,7 @@ labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
     {
         _driver->setScanRate(_acqrate);
         _driver->setStreaming();
-        _stream_publisher = _pnh->advertise<labjackt7test_msgs::labjackt7test_streaming>(_stream_pub_topic.c_str(),1,true);
+        _stream_publisher = _pnh->advertise<labjack_msgs::labjack_stream>(_stream_pub_topic.c_str(),1,true);
     }
     else
     {
@@ -32,21 +32,21 @@ labjack_t7_ros::labjack_t7_ros(ros::NodeHandle& pnh):_pnh(&pnh)
         {
             std::string temp = "labjack/channel_"+std::to_string(i);
             _pub_topics.push_back(temp);
-            _publishers.push_back(_pnh->advertise<labjackt7test_msgs::labjackt7test_channel>(temp,1,true));
+            _publishers.push_back(_pnh->advertise<labjack_msgs::labjack_channel>(temp,1,true));
         }
     }
 }
 
-labjack_t7_ros::~labjack_t7_ros()
+labjack_ros::~labjack_ros()
 {
     delete _driver;
 }
 
 //default functionality
-void labjack_t7_ros::startPublishing()
+void labjack_ros::startPublishing()
 {
     std::vector<double> temp;
-    labjackt7test_msgs::labjackt7test_channel msg;
+    labjack_msgs::labjack_channel msg;
     while(ros::ok() && _pnh->ok())
     {
         // temp.clear();
@@ -62,7 +62,7 @@ void labjack_t7_ros::startPublishing()
 }
 
 //streaming functionality
-bool labjack_t7_ros::startStream()
+bool labjack_ros::startStream()
 {
     if(_streamthread)
     {
@@ -74,11 +74,11 @@ bool labjack_t7_ros::startStream()
         ROS_DEBUG("Unable to start stream with device.");
         return false;
     }
-    _streamthread.reset(new std::thread(&labjack_t7_ros::publishStream,this));
+    _streamthread.reset(new std::thread(&labjack_ros::publishStream,this));
     return true;
 }
 
-void labjack_t7_ros::stopStream()
+void labjack_ros::stopStream()
 {
     do{
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -89,7 +89,7 @@ void labjack_t7_ros::stopStream()
     _driver->stopStream();
 }
 
-void labjack_t7_ros::publishStream()
+void labjack_ros::publishStream()
 {
     int dat_size = _driver->getDataSize();
     std::vector<double> aData;
@@ -115,7 +115,7 @@ void labjack_t7_ros::publishStream()
 }
 
 //private functions
-bool labjack_t7_ros::getParams()
+bool labjack_ros::getParams()
 {
     bool temp = true;
     if(!_pnh->getParam("pubrate",_pubrate))
