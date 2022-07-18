@@ -1,9 +1,11 @@
-Author: Yujun Lai (yujun.lai@uts.edu.au)
+Author: Velin Dimitrov (velin.dimitrov@tri.global)
 
 # Purpose
-This is a ros package which is used for the LabJack T7 DAQ. Currently it's used for collecting EMG data using the Delsys 8-Channel Bagnoli System. The default values for the driver are catered towards USB connection for the T7, but it can be changed easily to incorporate other methods (Ethernet, Wifi) and devices in LabJack (T4 series).
+This is a ROS package forked from the UTS-CAS/labjack_ros_driver repository to support the LabJack devices on the TRIKart platform.
 
 # Dependencies
+The package has been successfully tested on a NVIDIA Xavier NX with the LJM Library. The Xavier NX requries the Linux aarch64 version of the LJM Installer and works with Jetpack 4.6.
+
 For this to work, you do require the LabJack proprietary libraries LJM which can be obtained at:
 https://labjack.com/support/software/api/ljm
 
@@ -11,7 +13,7 @@ Changes are required in the CMakeLists.txt (line 12) to reflect where you have i
 
 ### Launch Arguments
 ```
-roslaunch labjackt7test labjack_t7.launch
+roslaunch labjack_ros labjack_ros.launch
 ```
 
 `publishrate` - publishing rate for ros (can go up to ~80Hz for 8 channels for usual functionality, streaming mode usually publishes at ~9Hz since the data is all buffered together)
@@ -28,14 +30,17 @@ roslaunch labjackt7test labjack_t7.launch
 
 ## (Other) Nodes
 
-#### labjackt7test_connection_test
+#### labjack_ros_connection_test
 Simple node to test connection by calling for the device's serial number and displaying on cout.
+```
+roslaunch labjack_ros labjack_ros_connection_test.launch
+```
 
-#### labjackt7test_driver_test
+#### labjack_ros_driver_test
 Simple node to test device driver by calling 10 samples using call response mode.
 
-#### labjackt7test_node
+#### labjack_ros_node
 Node used in launch file. Include functionality for default and streaming mode.
 
-#### labjackt7test_kill
+#### labjack_ros_kill
 Used for debugging purposes. Calls LJM to close connection from this device to all DAQ devices.
