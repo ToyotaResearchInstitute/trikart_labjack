@@ -1,4 +1,4 @@
-#include "labjack_ros/labjack_driver.h"
+#include "labjack_ros/labjack_ros_driver.h"
 
 labjack_driver::labjack_driver(int chan_num,int acq_rate,bool verbose,std::string identifier,double serial_num,int dev_type,int comm_type)
 {

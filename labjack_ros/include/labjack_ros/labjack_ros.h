@@ -1,4 +1,4 @@
-#include "labjack_ros/labjack_driver.h"
+#include "labjack_ros/labjack_ros_driver.h"
 #include <string>
 #include <memory>
 #include <mutex>
