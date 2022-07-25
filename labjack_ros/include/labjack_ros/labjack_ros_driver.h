@@ -11,7 +11,7 @@ class labjack_driver
 private:
     //default parameters for device
     struct default_param{
-        int _num_channel,_err_code,_device_handle,_acqrate;
+        int _num_channel,_err_code,_device_handle;
         bool _verbose,_dev_found,_streaming,_use_channel_names;
         double _serial_number;
         std::string _device_type,_comms_type,_identifier;
@@ -35,7 +35,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,double serial_num = 0);
+    labjack_driver(int chan_num = 8,bool verbose = false,double serial_num = 0);
     ~labjack_driver();
 
     // setter

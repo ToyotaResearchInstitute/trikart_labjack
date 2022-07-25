@@ -2,7 +2,7 @@
 
 labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
-    _driver = new labjack_driver(_numchannels,_acqrate,_verbose);
+    _driver = new labjack_driver(_numchannels,_verbose);
     
     if(!getParams())
     {
@@ -10,7 +10,6 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
         return;
     }
     _loop = new ros::Rate(_pubrate);
-
 
     if(!_driver->checkConnection())
     {
