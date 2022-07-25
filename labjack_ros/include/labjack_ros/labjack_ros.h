@@ -18,6 +18,8 @@ private:
 
     labjack_msgs::labjack_stream _stream_msg;
 
+    std::string _device_type, _conn_type, _identifier;
+
     labjack_driver* _driver;
     std::shared_ptr<std::thread> _streamthread;
     bool _str_started;

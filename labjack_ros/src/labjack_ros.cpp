@@ -187,5 +187,17 @@ bool labjack_ros::getParams()
         _driver->setAddressList(_addresses);           
     }
     
+    if( !_pnh->getParam("device_type",_device_type) || 
+        !_pnh->getParam("conn_type",_conn_type) || 
+        !_pnh->getParam("identifier",_identifier))
+
+    {
+        ROS_DEBUG("Unable to find a necessary device paramter (Device Type, Connection Type, or Identifier");
+    }
+    else
+    {
+        _driver->setDeviceParams(_device_type, _conn_type,_identifier);
+    }
+
     return temp;
 }

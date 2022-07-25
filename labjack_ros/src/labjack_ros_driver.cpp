@@ -1,20 +1,17 @@
 #include "labjack_ros/labjack_ros_driver.h"
 
-labjack_driver::labjack_driver(int chan_num,int acq_rate,bool verbose,std::string identifier,double serial_num,int dev_type,int comm_type)
+labjack_driver::labjack_driver(int chan_num,int acq_rate,bool verbose,double serial_num)
 {
     // input user chosen parameters
     _def_param._serial_number = serial_num;
-    _def_param._device_type = dev_type;
-    _def_param._comms_type = comm_type;
     _def_param._verbose = verbose;
     _def_param._num_channel = chan_num;
     _def_param._acqrate = acq_rate;
-    _def_param._identifier = identifier;
 
     // set boolean flags to default value
     _def_param._dev_found = openConnection();
     _def_param._streaming = false;
-    _def_param._use_channel_names = false;
+    _def_param._use_channel_names = true;
         
     _acquisition = false;
 }
@@ -78,6 +75,13 @@ std::vector<int>  labjack_driver::getAddressList()
 std::vector<std::string> labjack_driver::getNamesList()
 {
     return _names;
+}
+
+void labjack_driver::setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier)
+{
+    _def_param._device_type = dev_type;
+    _def_param._comms_type = conn_type;
+    _def_param._identifier = identifier;
 }
 
 double labjack_driver::getSerialNumber()
@@ -330,7 +334,10 @@ bool labjack_driver::openConnection()
 {
     try
     {
-        _def_param._err_code = LJM_Open(_def_param._device_type,_def_param._comms_type,_def_param._identifier.c_str(),&_def_param._device_handle);        
+        _def_param._err_code = LJM_OpenS(_def_param._device_type.c_str(),
+                                         _def_param._comms_type.c_str(),
+                                         _def_param._identifier.c_str(),
+                                         &_def_param._device_handle);        
     }
     catch(const std::exception& e)
     {

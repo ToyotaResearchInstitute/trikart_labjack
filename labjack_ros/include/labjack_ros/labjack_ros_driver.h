@@ -11,10 +11,10 @@ class labjack_driver
 private:
     //default parameters for device
     struct default_param{
-        int _device_type,_comms_type,_num_channel,_err_code,_device_handle,_acqrate;
+        int _num_channel,_err_code,_device_handle,_acqrate;
         bool _verbose,_dev_found,_streaming,_use_channel_names;
         double _serial_number;
-        std::string _identifier;
+        std::string _device_type,_comms_type,_identifier;
     }_def_param;
 
     //streaming specific parameters for device
@@ -35,7 +35,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,std::string identifier="LJM_idANY",double serial_num = 0,int dev_type = 0,int comm_type = 1);
+    labjack_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,double serial_num = 0);
     ~labjack_driver();
 
     // setter
@@ -43,6 +43,8 @@ public:
     void setNamesList(std::vector<std::string> name_list);
     std::vector<int>  getAddressList();
     std::vector<std::string> getNamesList();
+
+    void setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier);
 
     // checks and getters
     double getSerialNumber(); // getter for serial number of device

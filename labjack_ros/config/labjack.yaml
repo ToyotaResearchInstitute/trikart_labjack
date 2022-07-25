@@ -11,3 +11,6 @@ channel_addresses:
     - 8
     - 10
     - 14
+device_type: "ANY"
+conn_type: "ANY"
+identifier: "ANY"
