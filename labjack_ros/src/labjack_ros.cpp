@@ -2,6 +2,8 @@
 
 labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
+    _driver = new labjack_driver(_numchannels,_acqrate,_verbose);
+    
     if(!getParams())
     {
         ROS_ERROR("Check parameter server!");
@@ -9,7 +11,7 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
     }
     _loop = new ros::Rate(_pubrate);
 
-    _driver = new labjack_driver(_numchannels,_acqrate,_verbose);
+
     if(!_driver->checkConnection())
     {
         ROS_ERROR("Unable to find connection for labjack driver. Use verbose to check driver error.");
@@ -28,11 +30,27 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
     }
     else
     {
-        for(int i=0;i<_numchannels;i++)
+        if (_driver->checkChannelNames())
         {
-            std::string temp = "labjack/channel_"+std::to_string(i);
-            _pub_topics.push_back(temp);
-            _publishers.push_back(_pnh->advertise<labjack_msgs::labjack_channel>(temp,1,true));
+            _names = _driver->getNamesList();
+            
+            for(std::vector<std::string>::const_iterator it=_names.cbegin();it!=_names.cend();it++)
+            {
+                std::string temp = "labjack/channel_"+*it;
+                _pub_topics.push_back(temp);
+                _publishers.push_back(_pnh->advertise<labjack_msgs::labjack_channel>(temp,1,true));
+            }
+        }
+        else
+        {
+            _addresses = _driver->getAddressList();
+
+            for(std::vector<int>::const_iterator it=_addresses.cbegin();it!=_addresses.cend();it++)
+            {
+                std::string temp = "labjack/channel_addr_"+std::to_string(*it);
+                _pub_topics.push_back(temp);
+                _publishers.push_back(_pnh->advertise<labjack_msgs::labjack_channel>(temp,1,true));
+            }
         }
     }
 }
@@ -52,6 +70,7 @@ void labjack_ros::startPublishing()
         // temp.clear();
         msg.header.stamp = ros::Time::now();
         temp = _driver->getCurrentReadings();
+
         for(int i=0;i<_publishers.size();i++)
         {
             msg.data.data = temp.at(i);
@@ -151,5 +170,22 @@ bool labjack_ros::getParams()
             temp = false;
         }
     }
+    if(!_pnh->getParam("channel_names",_names))
+    {
+        ROS_DEBUG("Unable to find parameter for channel names.");
+    }
+    else
+    {
+        _driver->setNamesList(_names);
+    }
+    if(!_pnh->getParam("channel_addresses",_addresses))
+    {
+         ROS_DEBUG("Unable to find parameter for channel addresses.");
+    }
+    else
+    {
+        _driver->setAddressList(_addresses);           
+    }
+    
     return temp;
 }

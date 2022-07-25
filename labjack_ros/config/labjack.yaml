@@ -1,0 +1,13 @@
+channel_names: 
+    - "AIN0"
+    - "AIN1"
+    - "AIN2"
+    - "AIN3"
+channel_addresses:
+    - 0
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+    - 14

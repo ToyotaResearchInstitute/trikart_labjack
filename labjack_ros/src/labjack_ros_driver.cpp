@@ -14,28 +14,9 @@ labjack_driver::labjack_driver(int chan_num,int acq_rate,bool verbose,std::strin
     // set boolean flags to default value
     _def_param._dev_found = openConnection();
     _def_param._streaming = false;
-
+    _def_param._use_channel_names = false;
+        
     _acquisition = false;
-
-
-    // set address list for acquisition assuming conventional use
-    // (if 4 channels, uses AIN0-3, if 8 channels, uses AIN0-7)
-    if(_def_param._verbose)
-    {
-        std::cout << "Address list: ";
-    }
-    for (int i=0;i<_def_param._num_channel*2;i+=2)
-    {
-        _addresses.push_back(i);
-        if(_def_param._verbose)
-        {
-            std::cout << i << ", ";
-        }
-    }
-    if(_def_param._verbose)
-    {
-        std::cout << std::endl;
-    }
 }
 
 labjack_driver::~labjack_driver()
@@ -83,6 +64,22 @@ void labjack_driver::setAddressList(std::vector<int> add_list)
     _addresses = add_list;
 }
 
+void labjack_driver::setNamesList(std::vector<std::string> name_list)
+{
+    _names.clear();
+    _names = name_list;
+}
+
+std::vector<int>  labjack_driver::getAddressList()
+{
+    return _addresses;
+}
+
+std::vector<std::string> labjack_driver::getNamesList()
+{
+    return _names;
+}
+
 double labjack_driver::getSerialNumber()
 {
     if(!_def_param._dev_found)
@@ -109,24 +106,53 @@ bool labjack_driver::checkStreaming()
     return _def_param._streaming;
 }
 
+bool labjack_driver::checkChannelNames()
+{
+    return _def_param._use_channel_names;
+}
+
 
 // default functionality
 std::vector<double> labjack_driver::getCurrentReadings()
 {
     std::vector<double> temp;
     double tempval;
-    for(std::vector<int>::iterator it=_addresses.begin();it!=_addresses.end();it++)
+
+    if (_def_param._use_channel_names)
     {
-        _def_param._err_code = LJM_eReadAddress(_def_param._device_handle,*it,LJM_INT32,&tempval);
-        temp.push_back(tempval);
+        for(std::vector<std::string>::const_iterator it=_names.begin();it!=_names.end();it++)
+        {
+            std::cout << *it << std::endl;
+
+            _def_param._err_code = LJM_eReadName(_def_param._device_handle,it->data(),&tempval);
+            temp.push_back(tempval);
+            std::cout << tempval << std::endl;
+        }
+        return temp;
     }
-    return temp;
+    else
+    {
+        for(std::vector<int>::iterator it=_addresses.begin();it!=_addresses.end();it++)
+        {
+            _def_param._err_code = LJM_eReadAddress(_def_param._device_handle,*it,LJM_INT32,&tempval);
+            temp.push_back(tempval);
+        }
+        return temp;
+    }
 }
 
 
 // streaming functionality
 void labjack_driver::setStreaming()
 {
+    if(_def_param._use_channel_names)
+    {
+        if(_def_param._verbose)
+        {
+            std::cout << "Streaming only works with channel addresses, not channel names." << std::endl;
+        }
+        return;
+    }    
     if(_def_param._streaming)
     {
         if(_def_param._verbose)
@@ -144,7 +170,7 @@ void labjack_driver::setStreaming()
             std::cout << *it << ", ";
         }
         std::cout << std::endl << "Driver streaming scan rate: " << _str_param._scan_rate << " Hz" << std::endl;
-    }
+}
 }
 
 void labjack_driver::unsetStreaming()
@@ -182,6 +208,14 @@ int labjack_driver::getDataSize()
 
 bool labjack_driver::startStream()
 {
+    if(_def_param._use_channel_names)
+    {
+        if(_def_param._verbose)
+        {
+            std::cout << "Streaming only works with channel addresses, not channel names." << std::endl;
+        }
+        return false;
+    }    
     if(_acquisition)
     {
         if(_def_param._verbose)
