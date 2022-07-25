@@ -35,7 +35,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8,bool verbose = false,double serial_num = 0);
+    labjack_driver(int chan_num = 8,bool verbose = false);
     ~labjack_driver();
 
     // setter
