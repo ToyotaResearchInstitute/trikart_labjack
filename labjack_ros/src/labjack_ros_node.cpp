@@ -10,6 +10,7 @@ int main(int argc, char** argv)
         labjack_ros test(pnh);
         bool temp = false;
         pnh.getParam("streaming",temp);
+
         if(temp)
         {
             ROS_INFO("Parameter for streaming functionality: TRUE");

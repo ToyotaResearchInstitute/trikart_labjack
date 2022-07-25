@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <iomanip>
+#include <string>
 
 class labjack_driver
 {
@@ -11,7 +12,7 @@ private:
     //default parameters for device
     struct default_param{
         int _device_type,_comms_type,_num_channel,_err_code,_device_handle,_acqrate;
-        bool _verbose,_dev_found,_streaming;
+        bool _verbose,_dev_found,_streaming,_use_channel_names;
         double _serial_number;
         std::string _identifier;
     }_def_param;
@@ -24,6 +25,7 @@ private:
 
     //parameters relating to operation of driver
     std::vector<int> _addresses;
+    std::vector<std::string> _names;
 
     // object for streaming functionality
     bool _acquisition;
@@ -38,11 +40,15 @@ public:
 
     // setter
     void setAddressList(std::vector<int> add_list);
+    void setNamesList(std::vector<std::string> name_list);
+    std::vector<int>  getAddressList();
+    std::vector<std::string> getNamesList();
 
     // checks and getters
     double getSerialNumber(); // getter for serial number of device
     bool checkConnection(); //check whether connection to device is valid
     bool checkStreaming(); // check if driver is setup for streaming
+    bool checkChannelNames(); //check if driver is using channel names or addresses
 
     // default functionality
     std::vector<double> getCurrentReadings();   // get current acquisition reading for wrapper

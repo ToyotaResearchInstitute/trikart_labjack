@@ -28,6 +28,9 @@ private:
     std::string _stream_pub_topic;
     std::vector<std::string> _pub_topics;
 
+    std::vector<int> _addresses;
+    std::vector<std::string> _names;
+
     bool getParams();
     void publishStream();
 
