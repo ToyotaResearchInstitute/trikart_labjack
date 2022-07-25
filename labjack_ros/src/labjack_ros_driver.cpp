@@ -1,15 +1,12 @@
 #include "labjack_ros/labjack_ros_driver.h"
 
-labjack_driver::labjack_driver(int chan_num,bool verbose)
+labjack_driver::labjack_driver(int chan_num)
 {
     // input user chosen parameters
-    _def_param._verbose = verbose;
     _def_param._num_channel = chan_num;
 
     // set boolean flags to default value
     _def_param._dev_found = openConnection();
-    _def_param._streaming = false;
-    _def_param._use_channel_names = true;
         
     _acquisition = false;
 }
@@ -80,6 +77,13 @@ void labjack_driver::setDeviceParams(std::string dev_type, std::string conn_type
     _def_param._device_type = dev_type;
     _def_param._comms_type = conn_type;
     _def_param._identifier = identifier;
+}
+
+void labjack_driver::setStreamParams(bool use_channel_names, bool streaming, bool verbose)
+{
+    _def_param._use_channel_names = use_channel_names;
+    _def_param._streaming = streaming;
+    _def_param._verbose = verbose;
 }
 
 double labjack_driver::getSerialNumber()

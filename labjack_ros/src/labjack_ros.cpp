@@ -2,7 +2,7 @@
 
 labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
-    _driver = new labjack_driver(_numchannels,_verbose);
+    _driver = new labjack_driver(_numchannels);
     
     if(!getParams())
     {
@@ -151,16 +151,18 @@ bool labjack_ros::getParams()
         _acqrate = 5000;
         ROS_DEBUG("Unable to find parameter for acquisition rate for device. Default from driver of 5000 is used.");
     }
-    if(!_pnh->getParam("verbose",_verbose))
+    
+    if( !_pnh->getParam("use_channel_names",_use_channel_names) ||
+        !_pnh->getParam("streaming",_streaming) || 
+        !_pnh->getParam("verbose",_verbose))
     {
-        _verbose = false;
-        ROS_DEBUG("Unable to find parameter for verbosity. Default of FALSE is used.");
+        ROS_DEBUG("Unable to find a necessary streaming parameter (Use Channel Names, Streaming, or Verbose).");
     }
-    if(!_pnh->getParam("streaming",_streaming))
+    else
     {
-        _streaming = false;
-        ROS_DEBUG("Unable to find parameter for streaming from device. Default of FALSE is used.");
+        _driver->setStreamParams(_use_channel_names, _streaming, _verbose);
     }
+    
     if(_streaming)
     {
         if(!_pnh->getParam("streampubtopic",_stream_pub_topic))

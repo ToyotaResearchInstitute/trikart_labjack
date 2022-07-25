@@ -35,7 +35,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8,bool verbose = false);
+    labjack_driver(int chan_num = 8);
     ~labjack_driver();
 
     // setter
@@ -45,6 +45,7 @@ public:
     std::vector<std::string> getNamesList();
 
     void setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier);
+    void setStreamParams(bool use_channel_names, bool streaming, bool verbose);
 
     // checks and getters
     double getSerialNumber(); // getter for serial number of device

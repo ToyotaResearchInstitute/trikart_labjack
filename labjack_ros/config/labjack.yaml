@@ -14,3 +14,6 @@ channel_addresses:
 device_type: "ANY"
 conn_type: "ANY"
 identifier: "ANY"
+use_channel_names: false
+streaming: false
+verbose: false

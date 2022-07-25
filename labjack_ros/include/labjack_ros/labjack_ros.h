@@ -26,7 +26,7 @@ private:
 
     // ros related parameters
     int _acqrate,_pubrate,_numchannels;
-    bool _verbose,_streaming;
+    bool _use_channel_names,_streaming,_verbose;
     std::string _stream_pub_topic;
     std::vector<std::string> _pub_topics;
 
