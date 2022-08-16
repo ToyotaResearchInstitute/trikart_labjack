@@ -46,6 +46,7 @@ public:
 
     void setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier);
     void setStreamParams(bool use_channel_names, bool streaming, bool verbose);
+    void setConfigRegister(std::string address, int reg_value);
 
     // checks and getters
     double getSerialNumber(); // getter for serial number of device

@@ -86,6 +86,13 @@ void labjack_driver::setStreamParams(bool use_channel_names, bool streaming, boo
     _def_param._verbose = verbose;
 }
 
+void labjack_driver::setConfigRegister(std::string address, int reg_value)
+{
+        std::cout << "Write to " << address << ", value " << reg_value << std::endl;
+        //LJM_eWriteName takes a double as the value to write
+        _def_param._err_code = LJM_eWriteName(_def_param._device_handle, address.c_str(), (double) reg_value);
+}
+
 double labjack_driver::getSerialNumber()
 {
     if(!_def_param._dev_found)

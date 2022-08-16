@@ -200,5 +200,25 @@ bool labjack_ros::getParams()
         _driver->setDeviceParams(_device_type, _conn_type,_identifier);
     }
 
+    if(!_pnh->getParam("config_registers", _config_registers_list))
+    {
+        ROS_DEBUG("No registers defined to write to.");
+    }
+    else
+    {
+        XmlRpc::XmlRpcValue sublist;
+        std::string address;
+        int reg_value;
+
+        for (int i = 0; i < _config_registers_list.size();i++)
+        {
+            sublist = _config_registers_list[i];
+            address = static_cast<std::string>(sublist["address"]);
+            reg_value = static_cast<int>(sublist["value"]);
+
+            _driver->setConfigRegister(address, reg_value);
+        }
+    }
+
     return temp;
 }

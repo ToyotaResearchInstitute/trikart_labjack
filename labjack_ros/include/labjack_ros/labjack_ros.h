@@ -33,6 +33,8 @@ private:
     std::vector<int> _addresses;
     std::vector<std::string> _names;
 
+    XmlRpc::XmlRpcValue _config_registers_list;
+
     bool getParams();
     void publishStream();
 
