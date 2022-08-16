@@ -210,7 +210,7 @@ bool labjack_ros::getParams()
         std::string address;
         int reg_value;
 
-        for (int i = 0; i < _config_registers_list.size();i++)
+        for (int i = 0; i < _config_registers_list.size(); i++)
         {
             sublist = _config_registers_list[i];
             address = static_cast<std::string>(sublist["address"]);
