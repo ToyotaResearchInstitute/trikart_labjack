@@ -1,14 +1,12 @@
 <launch>
 
 <arg name="publishrate" default="100" />
-<arg name="channelnumber" default="8" />
-<arg name="acqrate" default="1000" />
+<arg name="acqrate" default="100" />
 <arg name="streampubtopic" default="/labjack/channelstream" />
 
 <node pkg="labjack_ros" type="labjack_ros_node" name="labjack_ros_node" output="screen" >
     <rosparam file="$(find labjack_ros)/config/labjack.yaml" />
     <param name="pubrate" type="int" value="$(arg publishrate)" />
-    <param name="numchannels" type="int" value="$(arg channelnumber)" />
     <param name="acquisitionrate" type="int" value="$(arg acqrate)" />
     <param name="streampubtopic" type="str" value="$(arg streampubtopic)" />
 </node>

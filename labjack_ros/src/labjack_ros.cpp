@@ -2,7 +2,7 @@
 
 labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
-    _driver = new labjack_driver(_numchannels);
+    _driver = new labjack_driver();
     
     if(!getParams())
     {
@@ -52,6 +52,7 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
             }
         }
     }
+    
 }
 
 labjack_ros::~labjack_ros()
@@ -141,11 +142,7 @@ bool labjack_ros::getParams()
         temp = false;
         ROS_DEBUG("Unable to find parameter for publish rate of topics");
     }
-    if(!_pnh->getParam("numchannels",_numchannels))
-    {
-        _numchannels = 8;
-        ROS_DEBUG("Unable to find parameter for number of channels of topics. Default of 8 is used.");
-    }
+    
     if(!_pnh->getParam("acquisitionrate",_acqrate))
     {
         _acqrate = 5000;

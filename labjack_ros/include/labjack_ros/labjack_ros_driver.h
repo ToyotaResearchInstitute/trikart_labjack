@@ -37,7 +37,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8);
+    labjack_driver();
     ~labjack_driver();
 
     // setter

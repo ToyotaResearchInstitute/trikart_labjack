@@ -1,13 +1,8 @@
 #include "labjack_ros/labjack_ros_driver.h"
 
-labjack_driver::labjack_driver(int chan_num)
+labjack_driver::labjack_driver()
 {
-    // input user chosen parameters
-    _num_channel = chan_num;
-
-    // set boolean flags to default value
-    _dev_found = openConnection();
-        
+    _dev_found = openConnection();   
     _acquisition = false;
 }
 
@@ -54,6 +49,7 @@ void labjack_driver::setAddressList(std::vector<int> add_list)
 {
     _addresses.clear();
     _addresses = add_list;
+    _num_channel = add_list.size();
 }
 
 void labjack_driver::setNamesList(std::vector<std::string> name_list)
