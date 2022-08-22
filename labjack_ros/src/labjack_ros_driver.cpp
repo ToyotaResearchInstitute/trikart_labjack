@@ -3,29 +3,29 @@
 labjack_driver::labjack_driver(int chan_num)
 {
     // input user chosen parameters
-    _def_param._num_channel = chan_num;
+    _num_channel = chan_num;
 
     // set boolean flags to default value
-    _def_param._dev_found = openConnection();
+    _dev_found = openConnection();
         
     _acquisition = false;
 }
 
 labjack_driver::~labjack_driver()
 {
-    if(!_def_param._dev_found)
+    if(!_dev_found)
     {
         return;
     }
 
     // force stop acquisition if streaming
-    if(_def_param._streaming && _acquisition)
+    if(_streaming && _acquisition)
     {
         stopStream();   // stops stream
-        int numtemp = _def_param._num_channel*_str_param._scan_rate/2;
+        int numtemp = _num_channel*_str_param._scan_rate/2;
         double temp[numtemp];
         acquireReadings(temp);  // clears buffer
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Final readings: ";
             for(int i=0;i<numtemp;i++)
@@ -41,7 +41,7 @@ labjack_driver::~labjack_driver()
         closeConnection();
         if(checkConnection())
         {
-            if(_def_param._verbose)
+            if(_verbose)
             {
                 std::cout << "Connection still exist. Trying closing connection in 500ms." << std::endl;
             }
@@ -74,30 +74,30 @@ std::vector<std::string> labjack_driver::getNamesList()
 
 void labjack_driver::setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier)
 {
-    _def_param._device_type = dev_type;
-    _def_param._comms_type = conn_type;
-    _def_param._identifier = identifier;
+    _device_type = dev_type;
+    _comms_type = conn_type;
+    _identifier = identifier;
 }
 
 void labjack_driver::setStreamParams(bool use_channel_names, bool streaming, bool verbose)
 {
-    _def_param._use_channel_names = use_channel_names;
-    _def_param._streaming = streaming;
-    _def_param._verbose = verbose;
+    _use_channel_names = use_channel_names;
+    _streaming = streaming;
+    _verbose = verbose;
 }
 
 void labjack_driver::setConfigRegister(std::string address, int reg_value)
 {
         std::cout << "Write to " << address << ", value " << reg_value << std::endl;
         //LJM_eWriteName takes a double as the value to write
-        _def_param._err_code = LJM_eWriteName(_def_param._device_handle, address.c_str(), (double) reg_value);
+        _err_code = LJM_eWriteName(_device_handle, address.c_str(), (double) reg_value);
 }
 
 double labjack_driver::getSerialNumber()
 {
-    if(!_def_param._dev_found)
+    if(!_dev_found)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "No device connected." << std::endl;
         }
@@ -105,23 +105,23 @@ double labjack_driver::getSerialNumber()
     }
     else
     {
-        return _def_param._serial_number;
+        return _serial_number;
     }
 }
 
 bool labjack_driver::checkConnection()
 {
-    return _def_param._dev_found;
+    return _dev_found;
 }
 
 bool labjack_driver::checkStreaming()
 {
-    return _def_param._streaming;
+    return _streaming;
 }
 
 bool labjack_driver::checkChannelNames()
 {
-    return _def_param._use_channel_names;
+    return _use_channel_names;
 }
 
 
@@ -131,13 +131,13 @@ std::vector<double> labjack_driver::getCurrentReadings()
     std::vector<double> temp;
     double tempval;
 
-    if (_def_param._use_channel_names)
+    if (_use_channel_names)
     {
         for(std::vector<std::string>::const_iterator it=_names.begin();it!=_names.end();it++)
         {
             std::cout << *it << std::endl;
 
-            _def_param._err_code = LJM_eReadName(_def_param._device_handle,it->data(),&tempval);
+            _err_code = LJM_eReadName(_device_handle,it->data(),&tempval);
             temp.push_back(tempval);
             std::cout << tempval << std::endl;
         }
@@ -147,7 +147,7 @@ std::vector<double> labjack_driver::getCurrentReadings()
     {
         for(std::vector<int>::iterator it=_addresses.begin();it!=_addresses.end();it++)
         {
-            _def_param._err_code = LJM_eReadAddress(_def_param._device_handle,*it,LJM_INT32,&tempval);
+            _err_code = LJM_eReadAddress(_device_handle,*it,LJM_INT32,&tempval);
             temp.push_back(tempval);
         }
         return temp;
@@ -158,24 +158,24 @@ std::vector<double> labjack_driver::getCurrentReadings()
 // streaming functionality
 void labjack_driver::setStreaming()
 {
-    if(_def_param._use_channel_names)
+    if(_use_channel_names)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Streaming only works with channel addresses, not channel names." << std::endl;
         }
         return;
     }    
-    if(_def_param._streaming)
+    if(_streaming)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Driver already set to stream data." << std::endl;
         }
         return;
     }
-    _def_param._streaming = true;
-    if(_def_param._verbose)
+    _streaming = true;
+    if(_verbose)
     {
         std::cout << "Setting driver to stream data from addresses: ";
         for(std::vector<int>::iterator it=_addresses.begin();it!=_addresses.end();it++)
@@ -188,16 +188,16 @@ void labjack_driver::setStreaming()
 
 void labjack_driver::unsetStreaming()
 {
-    if(!_def_param._streaming)
+    if(!_streaming)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Driver already in default functionality." << std::endl;
         }
         return;
     }
-    _def_param._streaming = false;
-    if(_def_param._verbose)
+    _streaming = false;
+    if(_verbose)
     {
         std::cout << "Unset driver to stream data from device. Default functionality is now on." << std::endl;
     }
@@ -206,7 +206,7 @@ void labjack_driver::unsetStreaming()
 void labjack_driver::setScanRate(double scanrate)
 {
     _str_param._scan_rate = scanrate;
-    _str_param._scans_per_read = scanrate/_def_param._num_channel;
+    _str_param._scans_per_read = scanrate/_num_channel;
 }
 
 double labjack_driver::getScanRate()
@@ -216,14 +216,14 @@ double labjack_driver::getScanRate()
 
 int labjack_driver::getDataSize()
 {
-    return _str_param._scans_per_read*_def_param._num_channel;
+    return _str_param._scans_per_read*_num_channel;
 }
 
 bool labjack_driver::startStream()
 {
-    if(_def_param._use_channel_names)
+    if(_use_channel_names)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Streaming only works with channel addresses, not channel names." << std::endl;
         }
@@ -231,7 +231,7 @@ bool labjack_driver::startStream()
     }    
     if(_acquisition)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Stream already started." << std::endl;
         }
@@ -239,33 +239,33 @@ bool labjack_driver::startStream()
     }
 
     _acquisition = true;
-    int scanList[_def_param._num_channel];
+    int scanList[_num_channel];
     std::copy(_addresses.begin(),_addresses.end(),scanList);
-    if(_def_param._verbose)
+    if(_verbose)
     {
-        std::cout << "Device Handle: " << _def_param._device_handle << "; Scan per read: " << _str_param._scans_per_read << "; Size of addresses: " << _addresses.size() << "; Scan rate: " << _str_param._scan_rate << std::endl;
+        std::cout << "Device Handle: " << _device_handle << "; Scan per read: " << _str_param._scans_per_read << "; Size of addresses: " << _addresses.size() << "; Scan rate: " << _str_param._scan_rate << std::endl;
         std::cout << "Setting streaming settings as per error code 2942 - for USB connection." << std::endl;
     }
     // sets stream settling us to 0
-    _def_param._err_code = LJM_eWriteAddress(_def_param._device_handle,4008,LJM_FLOAT32,0);
-    if(_def_param._verbose)
+    _err_code = LJM_eWriteAddress(_device_handle,4008,LJM_FLOAT32,0);
+    if(_verbose)
     {
-        std::cout << "Set stream settling us to 0. Error code: " << _def_param._err_code << std::endl;
+        std::cout << "Set stream settling us to 0. Error code: " << _err_code << std::endl;
     }
     // sets stream resolution index to 0
-    _def_param._err_code = LJM_eWriteAddress(_def_param._device_handle,4010,LJM_UINT32,0);
-    if(_def_param._verbose)
+    _err_code = LJM_eWriteAddress(_device_handle,4010,LJM_UINT32,0);
+    if(_verbose)
     {
-        std::cout << "Set stream resolution index to 0. Error code: " << _def_param._err_code << std::endl;
+        std::cout << "Set stream resolution index to 0. Error code: " << _err_code << std::endl;
     }
 
-    _def_param._err_code = LJM_eStreamStart(_def_param._device_handle,_str_param._scans_per_read,_addresses.size(),scanList,&_str_param._scan_rate);
-    if(_def_param._err_code != 0)
+    _err_code = LJM_eStreamStart(_device_handle,_str_param._scans_per_read,_addresses.size(),scanList,&_str_param._scan_rate);
+    if(_err_code != 0)
     {
         _acquisition = false;
-        if(_def_param._verbose)
+        if(_verbose)
         {
-            std::cout << "Error in starting stream. Stream not started. Error code: " << _def_param._err_code << std::endl;
+            std::cout << "Error in starting stream. Stream not started. Error code: " << _err_code << std::endl;
         }
         return false;
     }
@@ -276,25 +276,25 @@ void labjack_driver::stopStream()
 {
     if(!_acquisition)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Stream already stopped for device." << std::endl;
         }
         return;
     }
-    _def_param._err_code = LJM_eStreamStop(_def_param._device_handle);
+    _err_code = LJM_eStreamStop(_device_handle);
     _acquisition = false;
-    if(_def_param._err_code != 0)
+    if(_err_code != 0)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
-            std::cout << "Error in stopping stream. Error code: " << _def_param._err_code << std::endl;
+            std::cout << "Error in stopping stream. Error code: " << _err_code << std::endl;
         }
         _acquisition = true;
     }
     else
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Stream stopped for device serial number: " << getSerialNumber() << std::endl;
         }
@@ -305,9 +305,9 @@ bool labjack_driver::acquireReadings(double *data)
 {
     if(!_acquisition)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
-            if(!_def_param._streaming)
+            if(!_streaming)
             {
                 std::cout << "Streaming functionality not set for driver." << std::endl;
             }
@@ -318,20 +318,20 @@ bool labjack_driver::acquireReadings(double *data)
         }
         return false;
     }
-    _def_param._err_code = LJM_eStreamRead(_def_param._device_handle,data,&_str_param._devscan_backlog,&_str_param._ljmscan_backlog);
-    if(_def_param._err_code != 0)
+    _err_code = LJM_eStreamRead(_device_handle,data,&_str_param._devscan_backlog,&_str_param._ljmscan_backlog);
+    if(_err_code != 0)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
-            std::cout << "Error in stream read. Error code " << _def_param._err_code << std::endl;
+            std::cout << "Error in stream read. Error code " << _err_code << std::endl;
         }
         return false;
     }
     else
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
-            std::cout << "Stream read. Error code: " << _def_param._err_code << "; Device backlog: " << _str_param._devscan_backlog << "; LJM backlog: " << _str_param._ljmscan_backlog << std::endl;
+            std::cout << "Stream read. Error code: " << _err_code << "; Device backlog: " << _str_param._devscan_backlog << "; LJM backlog: " << _str_param._ljmscan_backlog << std::endl;
         }
         return true;
     }
@@ -343,21 +343,21 @@ bool labjack_driver::openConnection()
 {
     try
     {
-        _def_param._err_code = LJM_OpenS(_def_param._device_type.c_str(),
-                                         _def_param._comms_type.c_str(),
-                                         _def_param._identifier.c_str(),
-                                         &_def_param._device_handle);        
+        _err_code = LJM_OpenS(_device_type.c_str(),
+                              _comms_type.c_str(),
+                              _identifier.c_str(),
+                              &_device_handle);        
     }
     catch(const std::exception& e)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cerr << e.what() << '\n';
         }
     }
-    if(_def_param._err_code !=0)
+    if(_err_code !=0)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Error in opening connection with device." << std::endl;
         }
@@ -365,14 +365,14 @@ bool labjack_driver::openConnection()
     }
 
     try{
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cout << "Reading serial number" << std::endl;
         }
-        _def_param._err_code = LJM_eReadName(_def_param._device_handle,"SERIAL_NUMBER",&_def_param._serial_number);
-        if(_def_param._err_code != 0)
+        _err_code = LJM_eReadName(_device_handle,"SERIAL_NUMBER",&_serial_number);
+        if(_err_code != 0)
         {
-            if(_def_param._verbose)
+            if(_verbose)
             {
                 std::cout << "Error in reading serial number!" << std::endl;
             }
@@ -382,7 +382,7 @@ bool labjack_driver::openConnection()
     }
     catch(const std::exception& ex)
     {
-        if(_def_param._verbose)
+        if(_verbose)
         {
             std::cerr << ex.what() << std::endl;
         }
@@ -394,19 +394,19 @@ bool labjack_driver::openConnection()
 
 void labjack_driver::closeConnection()
 {
-    if(!_def_param._dev_found)
+    if(!_dev_found)
     {
         return;
     }
 
-    if(_def_param._verbose)
+    if(_verbose)
     {
-        std::cout << "Closing connection to device serial number: " << _def_param._serial_number << std::endl;
+        std::cout << "Closing connection to device serial number: " << _serial_number << std::endl;
     }
-    _def_param._err_code = LJM_Close(_def_param._device_handle);
-    if(_def_param._err_code !=0 && _def_param._verbose)
+    _err_code = LJM_Close(_device_handle);
+    if(_err_code !=0 && _verbose)
     {
         std::cout << "Error in closing connection with device" << std::endl;
     }
-    _def_param._dev_found = false;
+    _dev_found = false;
 }

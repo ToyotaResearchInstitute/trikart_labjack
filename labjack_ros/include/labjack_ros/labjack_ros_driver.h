@@ -9,13 +9,10 @@
 class labjack_driver
 {
 private:
-    //default parameters for device
-    struct default_param{
-        int _num_channel,_err_code,_device_handle;
-        bool _verbose,_dev_found,_streaming,_use_channel_names;
-        double _serial_number;
-        std::string _device_type,_comms_type,_identifier;
-    }_def_param;
+    int _num_channel,_err_code,_device_handle;
+    bool _verbose,_dev_found,_streaming,_use_channel_names;
+    double _serial_number;
+    std::string _device_type,_comms_type,_identifier;
 
     //streaming specific parameters for device
     struct stream_param{
