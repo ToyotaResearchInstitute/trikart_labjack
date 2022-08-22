@@ -15,10 +15,15 @@ private:
     std::string _device_type,_comms_type,_identifier;
 
     //streaming specific parameters for device
-    struct stream_param{
-        int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
-        double _scan_rate;
-    }_str_param;
+    // struct stream_param{
+    //     int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
+    //     double _scan_rate;
+    // }_str_param;
+
+
+    int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
+    double _scan_rate;
+
 
     //parameters relating to operation of driver
     std::vector<int> _addresses;

@@ -22,7 +22,7 @@ labjack_driver::~labjack_driver()
     if(_streaming && _acquisition)
     {
         stopStream();   // stops stream
-        int numtemp = _num_channel*_str_param._scan_rate/2;
+        int numtemp = _num_channel*_scan_rate/2;
         double temp[numtemp];
         acquireReadings(temp);  // clears buffer
         if(_verbose)
@@ -182,7 +182,7 @@ void labjack_driver::setStreaming()
         {
             std::cout << *it << ", ";
         }
-        std::cout << std::endl << "Driver streaming scan rate: " << _str_param._scan_rate << " Hz" << std::endl;
+        std::cout << std::endl << "Driver streaming scan rate: " << _scan_rate << " Hz" << std::endl;
 }
 }
 
@@ -205,18 +205,18 @@ void labjack_driver::unsetStreaming()
 
 void labjack_driver::setScanRate(double scanrate)
 {
-    _str_param._scan_rate = scanrate;
-    _str_param._scans_per_read = scanrate/_num_channel;
+    _scan_rate = scanrate;
+    _scans_per_read = scanrate/_num_channel;
 }
 
 double labjack_driver::getScanRate()
 {
-    return _str_param._scan_rate;
+    return _scan_rate;
 }
 
 int labjack_driver::getDataSize()
 {
-    return _str_param._scans_per_read*_num_channel;
+    return _scans_per_read*_num_channel;
 }
 
 bool labjack_driver::startStream()
@@ -243,7 +243,7 @@ bool labjack_driver::startStream()
     std::copy(_addresses.begin(),_addresses.end(),scanList);
     if(_verbose)
     {
-        std::cout << "Device Handle: " << _device_handle << "; Scan per read: " << _str_param._scans_per_read << "; Size of addresses: " << _addresses.size() << "; Scan rate: " << _str_param._scan_rate << std::endl;
+        std::cout << "Device Handle: " << _device_handle << "; Scan per read: " << _scans_per_read << "; Size of addresses: " << _addresses.size() << "; Scan rate: " << _scan_rate << std::endl;
         std::cout << "Setting streaming settings as per error code 2942 - for USB connection." << std::endl;
     }
     // sets stream settling us to 0
@@ -259,7 +259,7 @@ bool labjack_driver::startStream()
         std::cout << "Set stream resolution index to 0. Error code: " << _err_code << std::endl;
     }
 
-    _err_code = LJM_eStreamStart(_device_handle,_str_param._scans_per_read,_addresses.size(),scanList,&_str_param._scan_rate);
+    _err_code = LJM_eStreamStart(_device_handle,_scans_per_read,_addresses.size(),scanList,&_scan_rate);
     if(_err_code != 0)
     {
         _acquisition = false;
@@ -318,7 +318,7 @@ bool labjack_driver::acquireReadings(double *data)
         }
         return false;
     }
-    _err_code = LJM_eStreamRead(_device_handle,data,&_str_param._devscan_backlog,&_str_param._ljmscan_backlog);
+    _err_code = LJM_eStreamRead(_device_handle,data,&_devscan_backlog,&_ljmscan_backlog);
     if(_err_code != 0)
     {
         if(_verbose)
@@ -331,7 +331,7 @@ bool labjack_driver::acquireReadings(double *data)
     {
         if(_verbose)
         {
-            std::cout << "Stream read. Error code: " << _err_code << "; Device backlog: " << _str_param._devscan_backlog << "; LJM backlog: " << _str_param._ljmscan_backlog << std::endl;
+            std::cout << "Stream read. Error code: " << _err_code << "; Device backlog: " << _devscan_backlog << "; LJM backlog: " << _ljmscan_backlog << std::endl;
         }
         return true;
     }
