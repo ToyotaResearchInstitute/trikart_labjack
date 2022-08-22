@@ -1,8 +1,5 @@
 channel_names: 
-    - "AIN0"
-    - "AIN1"
-    - "AIN2"
-    - "AIN3"
+     - "DIO4_EF_READ_A"
 channel_addresses:
     - 0
     - 2
@@ -11,9 +8,16 @@ channel_addresses:
     - 8
     - 10
     - 14
+config_registers:
+    - address: "DIO4_EF_ENABLE"
+      value: 0
+    - address: "DIO4_EF_INDEX"
+      value: 11
+    - address: "DIO4_EF_ENABLE"
+      value: 1
 device_type: "ANY"
 conn_type: "ANY"
 identifier: "ANY"
 use_channel_names: false
-streaming: false
-verbose: false
+streaming: true
+verbose: true
