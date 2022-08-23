@@ -21,7 +21,7 @@ config_registers:
       value: 1
 
 channel_names: 
-     - "DIO4_EF_READ_A"
+    - "DIO4_EF_READ_A"
 channel_addresses:
     - 0
     - 2
