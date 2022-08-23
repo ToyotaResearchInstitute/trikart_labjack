@@ -121,7 +121,7 @@ bool labjack_driver::checkChannelNames()
 }
 
 
-// default functionality
+// polling functionality
 std::vector<double> labjack_driver::getCurrentReadings()
 {
     std::vector<double> temp;
@@ -188,14 +188,14 @@ void labjack_driver::unsetStreaming()
     {
         if(_verbose)
         {
-            std::cout << "Driver already in default functionality." << std::endl;
+            std::cout << "Driver already in polling functionality." << std::endl;
         }
         return;
     }
     _streaming = false;
     if(_verbose)
     {
-        std::cout << "Unset driver to stream data from device. Default functionality is now on." << std::endl;
+        std::cout << "Unset driver to stream data from device. Polling functionality is now on." << std::endl;
     }
 }
 

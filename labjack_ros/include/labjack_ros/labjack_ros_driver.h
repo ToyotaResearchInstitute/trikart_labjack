@@ -14,16 +14,8 @@ private:
     double _serial_number;
     std::string _device_type,_comms_type,_identifier;
 
-    //streaming specific parameters for device
-    // struct stream_param{
-    //     int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
-    //     double _scan_rate;
-    // }_str_param;
-
-
     int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
     double _scan_rate;
-
 
     //parameters relating to operation of driver
     std::vector<int> _addresses;
@@ -56,7 +48,7 @@ public:
     bool checkStreaming(); // check if driver is setup for streaming
     bool checkChannelNames(); //check if driver is using channel names or addresses
 
-    // default functionality
+    // polling functionality
     std::vector<double> getCurrentReadings();   // get current acquisition reading for wrapper
 
     // streaming functionality
