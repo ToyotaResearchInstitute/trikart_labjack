@@ -1,3 +1,25 @@
+device_type: "ANY"
+conn_type: "ANY"
+identifier: "ANY"
+
+pubrate: 100
+scanrate: 100
+scansperread: 1
+
+streampubtopic: "/labjack/channelstream"
+
+use_channel_names: false
+streaming: true
+verbose: true
+
+config_registers:
+    - address: "DIO4_EF_ENABLE"
+      value: 0
+    - address: "DIO4_EF_INDEX"
+      value: 11
+    - address: "DIO4_EF_ENABLE"
+      value: 1
+
 channel_names: 
      - "DIO4_EF_READ_A"
 channel_addresses:
@@ -8,16 +30,3 @@ channel_addresses:
     - 8
     - 10
     - 14
-config_registers:
-    - address: "DIO4_EF_ENABLE"
-      value: 0
-    - address: "DIO4_EF_INDEX"
-      value: 11
-    - address: "DIO4_EF_ENABLE"
-      value: 1
-device_type: "ANY"
-conn_type: "ANY"
-identifier: "ANY"
-use_channel_names: false
-streaming: true
-verbose: true
