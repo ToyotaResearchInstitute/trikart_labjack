@@ -62,7 +62,7 @@ public:
     // streaming functionality
     void setStreaming(); // setup streaming parameters
     void unsetStreaming(); // clear streaming parameters
-    void setScanRate(double scanrate); // sets scanning rate
+    void setScanParams(double scanrate, int scans_per_read); // sets scanning rate and scans per read
     double getScanRate(); // getter for scan rate
     int getDataSize(); // getter for datasize for readings from stream
 

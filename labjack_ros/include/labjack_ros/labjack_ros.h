@@ -25,7 +25,7 @@ private:
     bool _str_started;
 
     // ros related parameters
-    int _acqrate,_pubrate;
+    int _scanrate,_pubrate,_scans_per_read;
     bool _use_channel_names,_streaming,_verbose;
     std::string _stream_pub_topic;
     std::vector<std::string> _pub_topics;

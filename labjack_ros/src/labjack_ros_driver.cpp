@@ -199,10 +199,10 @@ void labjack_driver::unsetStreaming()
     }
 }
 
-void labjack_driver::setScanRate(double scanrate)
+void labjack_driver::setScanParams(double scanrate, int scans_per_read)
 {
     _scan_rate = scanrate;
-    _scans_per_read = scanrate/_num_channel;
+    _scans_per_read = scans_per_read;
 }
 
 double labjack_driver::getScanRate()
