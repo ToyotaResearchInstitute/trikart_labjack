@@ -9,19 +9,13 @@
 class labjack_driver
 {
 private:
-    //default parameters for device
-    struct default_param{
-        int _device_type,_comms_type,_num_channel,_err_code,_device_handle,_acqrate;
-        bool _verbose,_dev_found,_streaming,_use_channel_names;
-        double _serial_number;
-        std::string _identifier;
-    }_def_param;
+    int _num_channel,_err_code,_device_handle;
+    bool _verbose,_dev_found,_streaming,_use_channel_names;
+    double _serial_number;
+    std::string _device_type,_comms_type,_identifier;
 
-    //streaming specific parameters for device
-    struct stream_param{
-        int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
-        double _scan_rate;
-    }_str_param;
+    int _scans_per_read,_devscan_backlog,_ljmscan_backlog;
+    double _scan_rate;
 
     //parameters relating to operation of driver
     std::vector<int> _addresses;
@@ -35,7 +29,7 @@ private:
     void closeConnection(); // closes all connections
 
 public:
-    labjack_driver(int chan_num = 8,int acq_rate = 5000,bool verbose = false,std::string identifier="LJM_idANY",double serial_num = 0,int dev_type = 0,int comm_type = 1);
+    labjack_driver();
     ~labjack_driver();
 
     // setter
@@ -44,19 +38,23 @@ public:
     std::vector<int>  getAddressList();
     std::vector<std::string> getNamesList();
 
+    void setDeviceParams(std::string dev_type, std::string conn_type, std::string identifier);
+    void setStreamParams(bool use_channel_names, bool streaming, bool verbose);
+    void setConfigRegister(std::string address, int reg_value);
+
     // checks and getters
     double getSerialNumber(); // getter for serial number of device
     bool checkConnection(); //check whether connection to device is valid
     bool checkStreaming(); // check if driver is setup for streaming
     bool checkChannelNames(); //check if driver is using channel names or addresses
 
-    // default functionality
+    // polling functionality
     std::vector<double> getCurrentReadings();   // get current acquisition reading for wrapper
 
     // streaming functionality
     void setStreaming(); // setup streaming parameters
     void unsetStreaming(); // clear streaming parameters
-    void setScanRate(double scanrate); // sets scanning rate
+    void setScanParams(double scanrate, int scans_per_read); // sets scanning rate and scans per read
     double getScanRate(); // getter for scan rate
     int getDataSize(); // getter for datasize for readings from stream
 

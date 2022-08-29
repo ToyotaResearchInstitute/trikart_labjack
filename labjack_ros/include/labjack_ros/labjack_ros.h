@@ -18,18 +18,22 @@ private:
 
     labjack_msgs::labjack_stream _stream_msg;
 
+    std::string _device_type, _conn_type, _identifier;
+
     labjack_driver* _driver;
     std::shared_ptr<std::thread> _streamthread;
     bool _str_started;
 
     // ros related parameters
-    int _acqrate,_pubrate,_numchannels;
-    bool _verbose,_streaming;
+    int _scanrate,_pubrate,_scans_per_read;
+    bool _use_channel_names,_streaming,_verbose;
     std::string _stream_pub_topic;
     std::vector<std::string> _pub_topics;
 
     std::vector<int> _addresses;
     std::vector<std::string> _names;
+
+    XmlRpc::XmlRpcValue _config_registers_list;
 
     bool getParams();
     void publishStream();

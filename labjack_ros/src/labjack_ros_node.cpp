@@ -27,7 +27,7 @@ int main(int argc, char** argv)
         }
         else
         {
-            ROS_INFO("Usual Functionality");
+            ROS_INFO("Polling Functionality");
             test.startPublishing();
         }
     }    

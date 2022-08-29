@@ -2,7 +2,7 @@
 
 labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 {
-    _driver = new labjack_driver(_numchannels,_acqrate,_verbose);
+    _driver = new labjack_driver();
     
     if(!getParams())
     {
@@ -10,7 +10,6 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
         return;
     }
     _loop = new ros::Rate(_pubrate);
-
 
     if(!_driver->checkConnection())
     {
@@ -24,7 +23,7 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
 
     if(_streaming)
     {
-        _driver->setScanRate(_acqrate);
+        _driver->setScanParams(_scanrate, _scans_per_read);
         _driver->setStreaming();
         _stream_publisher = _pnh->advertise<labjack_msgs::labjack_stream>(_stream_pub_topic.c_str(),1,true);
     }
@@ -53,6 +52,7 @@ labjack_ros::labjack_ros(ros::NodeHandle& pnh):_pnh(&pnh)
             }
         }
     }
+    
 }
 
 labjack_ros::~labjack_ros()
@@ -142,26 +142,30 @@ bool labjack_ros::getParams()
         temp = false;
         ROS_DEBUG("Unable to find parameter for publish rate of topics");
     }
-    if(!_pnh->getParam("numchannels",_numchannels))
+    
+    if(!_pnh->getParam("scanrate",_scanrate))
     {
-        _numchannels = 8;
-        ROS_DEBUG("Unable to find parameter for number of channels of topics. Default of 8 is used.");
-    }
-    if(!_pnh->getParam("acquisitionrate",_acqrate))
-    {
-        _acqrate = 5000;
+        _scanrate = 5000;
         ROS_DEBUG("Unable to find parameter for acquisition rate for device. Default from driver of 5000 is used.");
     }
-    if(!_pnh->getParam("verbose",_verbose))
+
+    if(!_pnh->getParam("scansperread",_scans_per_read))
     {
-        _verbose = false;
-        ROS_DEBUG("Unable to find parameter for verbosity. Default of FALSE is used.");
+        _scans_per_read = 1;
+        ROS_DEBUG("Unable to find parameter for number of scans per read. Default of 1 is used.");
     }
-    if(!_pnh->getParam("streaming",_streaming))
+    
+    if( !_pnh->getParam("use_channel_names",_use_channel_names) ||
+        !_pnh->getParam("streaming",_streaming) || 
+        !_pnh->getParam("verbose",_verbose))
     {
-        _streaming = false;
-        ROS_DEBUG("Unable to find parameter for streaming from device. Default of FALSE is used.");
+        ROS_DEBUG("Unable to find a necessary streaming parameter (Use Channel Names, Streaming, or Verbose).");
     }
+    else
+    {
+        _driver->setStreamParams(_use_channel_names, _streaming, _verbose);
+    }
+    
     if(_streaming)
     {
         if(!_pnh->getParam("streampubtopic",_stream_pub_topic))
@@ -187,5 +191,37 @@ bool labjack_ros::getParams()
         _driver->setAddressList(_addresses);           
     }
     
+    if( !_pnh->getParam("device_type",_device_type) || 
+        !_pnh->getParam("conn_type",_conn_type) || 
+        !_pnh->getParam("identifier",_identifier))
+
+    {
+        ROS_DEBUG("Unable to find a necessary device paramter (Device Type, Connection Type, or Identifier");
+    }
+    else
+    {
+        _driver->setDeviceParams(_device_type, _conn_type,_identifier);
+    }
+
+    if(!_pnh->getParam("config_registers", _config_registers_list))
+    {
+        ROS_DEBUG("No registers defined to write to.");
+    }
+    else
+    {
+        XmlRpc::XmlRpcValue sublist;
+        std::string address;
+        int reg_value;
+
+        for (int i = 0; i < _config_registers_list.size(); i++)
+        {
+            sublist = _config_registers_list[i];
+            address = static_cast<std::string>(sublist["address"]);
+            reg_value = static_cast<int>(sublist["value"]);
+
+            _driver->setConfigRegister(address, reg_value);
+        }
+    }
+
     return temp;
 }
